@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+jinja2
+python-multipart
+requests
+gtts
+moviepy==1.0.3
+imageio
+imageio-ffmpeg
+numpy
+pillow
+decorator
+proglog
+tqdm
+google-genai
