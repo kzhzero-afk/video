@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Video Generator</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+}
+.upload-box {
+    border: 2px dashed #38bdf8;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 6px;
+    border: none;
+}
+.row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.col {
+    flex: 1;
+    min-width: 150px;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    background: #38bdf8;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+}
+button:hover {
+    background: #0ea5e9;
+}
+video {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 AI Video Generator</h1>
+
+<div class="card">
+
+    <div class="upload-box">
+        <input type="file" id="videoFile" accept="video/*">
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label>Language</label>
+            <select id="language">
+                <option value="my">Myanmar</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <label>Voice</label>
+            <select id="voice">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <label>Ratio</label>
+            <select id="ratio">
+                <option value="9:16">9:16</option>
+                <option value="16:9">16:9</option>
+            </select>
+        </div>
+    </div>
+
+    <button id="generateBtn">🚀 Upload & Generate</button>
+
+    <video id="preview" controls></video>
+
+</div>
+
+</div>
+
+<script>
+console.log("JS LOADED");
+document.getElementById("generateBtn").onclick = async function () {
+    const file = document.getElementById("videoFile").files[0];
+    if (!file) {
+        alert("Select video first");
+        return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("language", document.getElementById("language").value);
+    formData.append("voice", document.getElementById("voice").value);
+    formData.append("ratio", document.getElementById("ratio").value);
+    try {
+        const res = await fetch("/upload", {
+            method: "POST",
+            body: formData
+        });
+        const data = await res.json();
+        console.log("SERVER:", data);
+        document.getElementById("preview").src =
+            URL.createObjectURL(file);
+        alert("Upload Success!");
+    } catch (err) {
+        console.log(err);
+        alert("Failed to fetch");
+    }
+};
+</script>
+
+</body>
+</html>
